@@ -13,23 +13,43 @@ fn main() {
     let args = Args::parse();
 
     let toml_file = args.toml_file;
-    let toml_contents = std::fs::read_to_string(toml_file).expect("Failed to read TOML file");
-    let toml_data: Value = toml_contents.parse().expect("Failed to parse TOML data");
+    let toml_contents = match std::fs::read_to_string(toml_file) {
+        Ok(contents) => contents,
+        Err(e) => {
+            eprintln!("Error reading TOML file: {}", e);
+            return;
+        }
+    };
+    let toml_data: Value = match toml_contents.parse() {
+        Ok(data) => data,
+        Err(e) => {
+            eprintln!("Error parsing TOML file: {}", e);
+            return;
+        }
+    };
 
-    let username = toml_data["username"].as_str().unwrap_or_default();
-    let password = toml_data["password"].as_str().unwrap_or_default();
-    let dbname = toml_data["dbname"].as_str().unwrap_or_default();
+    println!("Error is past this point!");
+    // Invoke get_key(String key)
+    let username = toml_data["username"].as_str().unwrap_or_default(); //NO Expects
+    let password = toml_data["password"].as_str().unwrap_or_default(); //No Expects
+    let dbname = toml_data["dbname"].as_str().unwrap_or_default(); // No Expect
 
     let command = format!(
-        "diesel migration --database-url postgres://{}:{}@localhost:5432/{} run",
+        "migration --database-url postgres://{}:{}@localhost:5432/{} run",
         username, password, dbname
     );
 
-    let output = Command::new("sh")
-        .arg("-c")
-        .arg(&command)
-        .output()
-        .expect("Failed to execute command");
+    let output = match Command::new("diesel").arg("-c").arg(&command).output() {
+            Ok(out) => {
+                println!("Command executed successfully");
+                out
+            },
+            Err(e) => {
+                eprintln!("Error executing command: {}", e);
+                println!("Tip: Verify that 'diesel' is installed");
+                return;
+            }
+        };
 
     println!("{}", String::from_utf8_lossy(&output.stdout));
 }
