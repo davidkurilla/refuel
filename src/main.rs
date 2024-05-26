@@ -28,7 +28,6 @@ fn main() {
         }
     };
 
-    println!("Error is past this point!");
     // Invoke get_key(String key)
     let username = toml_data["username"].as_str().unwrap_or_default(); //NO Expects
     let password = toml_data["password"].as_str().unwrap_or_default(); //No Expects
@@ -39,7 +38,7 @@ fn main() {
         username, password, dbname
     );
 
-    let output = match Command::new("diesel").arg("-c").arg(&command).output() {
+    let output = match Command::new("diesel").arg(&command).output() {
             Ok(out) => {
                 println!("Command executed successfully");
                 out
