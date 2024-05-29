@@ -9,5 +9,7 @@ repository = "https://github.com/davidkurilla/refuel.git"
 readme = "README.md"
 
 [dependencies]
+diesel = { version = "2.1.6", features = ["postgres"] }
+diesel_migrations = "2.1.0"
 toml = "0.5"
 clap = { version = "4.1.8", features = ["derive"] }

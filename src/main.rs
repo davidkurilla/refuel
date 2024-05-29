@@ -1,4 +1,5 @@
-use std::process::Command;
+use diesel::{pg::PgConnection, Connection};
+use diesel_migrations::{FileBasedMigrations, HarnessWithOutput, MigrationHarness};
 use toml::Value;
 use clap::{Parser, ValueHint};
 
@@ -33,22 +34,19 @@ fn main() {
     let password = toml_data["password"].as_str().unwrap_or_default(); //No Expects
     let dbname = toml_data["dbname"].as_str().unwrap_or_default(); // No Expect
 
-    let command = format!(
-        "migration --database-url postgres://{}:{}@localhost:5432/{} run",
+    let db_url = format!("postgres://{}:{}@localhost:5432/{}",
         username, password, dbname
     );
 
-    let output = match Command::new("diesel").arg(&command).output() {
-            Ok(out) => {
-                println!("Command executed successfully");
-                out
-            },
-            Err(e) => {
-                eprintln!("Error executing command: {}", e);
-                println!("Tip: Verify that 'diesel' is installed");
-                return;
-            }
-        };
+    let mut conn = PgConnection::establish(&db_url)
+    .expect("Unable to connect");
 
-    println!("{}", String::from_utf8_lossy(&output.stdout));
+    let migrations = FileBasedMigrations::find_migrations_directory()
+        .expect("Could not read migrations directory");
+
+    let mut harness = HarnessWithOutput::write_to_stdout(&mut conn);
+
+    harness.run_pending_migrations(migrations).expect("Couldn't run migrations");
+
+    println!("Successfully ran migrations")
 }
