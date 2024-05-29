@@ -6,7 +6,7 @@ license = "MIT"
 license_file = "LICENSE"
 description = "A simple diesel postgres migrator that uses TOML files"
 repository = "https://github.com/davidkurilla/refuel.git"
-readme = "README.md"
+readme = "docs/README.md"
 
 [dependencies]
 diesel = { version = "2.1.6", features = ["postgres"] }
