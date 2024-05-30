@@ -29,10 +29,25 @@ fn main() {
         }
     };
 
-    // Invoke get_key(String key)
-    let username = toml_data["username"].as_str().unwrap_or_default(); //NO Expects
-    let password = toml_data["password"].as_str().unwrap_or_default(); //No Expects
-    let dbname = toml_data["dbname"].as_str().unwrap_or_default(); // No Expect
+    let table = "master_database";
+
+    let username = toml_data
+        .get(table)
+        .and_then(|master_database| master_database.get("username"))
+        .and_then(|v| v.as_str())
+        .unwrap_or_default();
+
+    let password = toml_data
+        .get(table)
+        .and_then(|master_database| master_database.get("password"))
+        .and_then(|v| v.as_str())
+        .unwrap_or_default();
+    
+    let dbname = toml_data
+        .get(table)
+        .and_then(|master_database| master_database.get("dbname"))
+        .and_then(|v| v.as_str())
+        .unwrap_or_default();
 
     let db_url = format!("postgres://{}:{}@localhost:5432/{}",
         username, password, dbname
@@ -50,3 +65,4 @@ fn main() {
 
     println!("Successfully ran migrations")
 }
+
