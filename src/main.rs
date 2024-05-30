@@ -29,20 +29,22 @@ fn main() {
         }
     };
 
+    let table = "master_database";
+
     let username = toml_data
-        .get("master_database")
+        .get(table)
         .and_then(|master_database| master_database.get("username"))
         .and_then(|v| v.as_str())
         .unwrap_or_default();
 
     let password = toml_data
-        .get("master_database")
+        .get(table)
         .and_then(|master_database| master_database.get("password"))
         .and_then(|v| v.as_str())
         .unwrap_or_default();
     
     let dbname = toml_data
-        .get("master_database")
+        .get(table)
         .and_then(|master_database| master_database.get("dbname"))
         .and_then(|v| v.as_str())
         .unwrap_or_default();
