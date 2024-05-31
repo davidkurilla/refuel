@@ -54,7 +54,33 @@ Currently, `Refuel` uses Rust stable version, and does not have tests beyond Git
 
 ### Git Commit Messages
 
+- Use the present tense ("Add feature" not "Added feature").
+- Use the imperative mood ("Move cursor to..." not "Moves cursor to...").
+- All commit messages should use the following convention:
+
+\<type>: \<description>
+
+
+
+EXAMPLE: 
+[DOCS] Create `CONTRIBUTING.md` documents 
+
 ### Code Style
 
+- Follow the coding style conventions used in the project.
+- Ensure your code is properly linted.
+- Write meaningful tests for your changes.
 
 # Getting Started
+
+1. Clone the repo: 
+
+```shell
+git clone https://github.com/davidkurilla/refuel.git
+```
+
+2. Checkout a branch
+
+3. Ensure you follow the code and commit message style when making pull requests
+
+Thank you for contributing to Refuel!
