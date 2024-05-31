@@ -3,11 +3,16 @@ use diesel_migrations::{FileBasedMigrations, HarnessWithOutput, MigrationHarness
 use toml::Value;
 use clap::{Parser, ValueHint};
 
+mod input_file;
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
     #[arg(short, long, value_hint = ValueHint::FilePath)]
     toml_file: std::path::PathBuf,
+
+    #[arg(long, default_value_t = String::from(""))]
+    toml_table: String
 }
 
 fn main() {
@@ -29,29 +34,23 @@ fn main() {
         }
     };
 
-    let table = "master_database";
+    let table = if !args.toml_table.is_empty() {
+        let table = toml_data.get(&args.toml_table);
+        if table.is_none() {
+            eprintln!("Unable to find toml table: \"{}\"", &args.toml_table);
+            return;
+        }
+        
+        table.unwrap()
+    } else {
+        &toml_data
+    };
 
-    let username = toml_data
-        .get(table)
-        .and_then(|master_database| master_database.get("username"))
-        .and_then(|v| v.as_str())
-        .unwrap_or_default();
+    let input = input_file::InputData::read(table);
 
-    let password = toml_data
-        .get(table)
-        .and_then(|master_database| master_database.get("password"))
-        .and_then(|v| v.as_str())
-        .unwrap_or_default();
-    
-    let dbname = toml_data
-        .get(table)
-        .and_then(|master_database| master_database.get("dbname"))
-        .and_then(|v| v.as_str())
-        .unwrap_or_default();
+    let db_url = input.postgres_url();
 
-    let db_url = format!("postgres://{}:{}@localhost:5432/{}",
-        username, password, dbname
-    );
+    println!("Attempting to connect to {}", db_url);
 
     let mut conn = PgConnection::establish(&db_url)
     .expect("Unable to connect");
