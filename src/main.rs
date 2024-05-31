@@ -3,6 +3,7 @@ use diesel_migrations::{FileBasedMigrations, HarnessWithOutput, MigrationHarness
 use toml::Value;
 use clap::{Parser, ValueHint};
 
+mod tests;
 mod input_file;
 
 #[derive(Parser, Debug)]
