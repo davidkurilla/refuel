@@ -1,6 +1,6 @@
 # Contributing to Refuel
 
-First off, thank you for considering contributing to citrus! Your help is greatly appreciated.
+First off, thank you for considering contributing to refuel! Your help is greatly appreciated.
 
 # Table of Contents
 
@@ -16,7 +16,7 @@ First off, thank you for considering contributing to citrus! Your help is greatl
 
 
 # Code of Conduct
-This project and everyone participating in it is governed by the [Rust Code of Conduct](https://www.rust-lang.org/policies/code-of-conduct). By participating, you are expected to uphold this code. Please report unacceptable behavior to [davidkurilla03@.com].
+This project and everyone participating in it is governed by the [Rust Code of Conduct](https://www.rust-lang.org/policies/code-of-conduct). By participating, you are expected to uphold this code. 
 
 # How Can I Contribute?
 
@@ -48,7 +48,7 @@ We welcome suggestions for enhancements as the project continues. If you have a 
 6. Push to the branch (`git push origin feature/YourFeature`).
 7. Open a pull request describing your changes.
 
-Currently, `Refuel` uses Rust stable version, and does not have tests beyond GitHub Actions
+Currently, `refuel` uses Rust stable version, and does not have tests beyond GitHub Actions
 
 # Style Guides
 
@@ -58,12 +58,10 @@ Currently, `Refuel` uses Rust stable version, and does not have tests beyond Git
 - Use the imperative mood ("Move cursor to..." not "Moves cursor to...").
 - All commit messages should use the following convention:
 
-\<type>: \<description>
-
-
+`<type>: <description>`
 
 EXAMPLE: 
-[DOCS] Create `CONTRIBUTING.md` documents 
+`docs: create 'CONTRIBUTING.md' document` 
 
 ### Code Style
 
@@ -83,4 +81,4 @@ git clone https://github.com/davidkurilla/refuel.git
 
 3. Ensure you follow the code and commit message style when making pull requests
 
-Thank you for contributing to Refuel!
+Thank you for contributing to refuel!
