@@ -3,7 +3,6 @@ use diesel_migrations::{FileBasedMigrations, HarnessWithOutput, MigrationHarness
 use toml::Value;
 use clap::{Parser, ValueHint};
 
-mod tests;
 mod input_file;
 
 #[derive(Parser, Debug)]
@@ -19,7 +18,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let toml_file = args.toml_file;
+    let toml_file = &args.toml_file;
     let toml_contents = match std::fs::read_to_string(toml_file) {
         Ok(contents) => contents,
         Err(e) => {
@@ -35,17 +34,7 @@ fn main() {
         }
     };
 
-    let table = if !args.toml_table.is_empty() {
-        let table = toml_data.get(&args.toml_table);
-        if table.is_none() {
-            eprintln!("Unable to find toml table: \"{}\"", &args.toml_table);
-            return;
-        }
-        
-        table.unwrap()
-    } else {
-        &toml_data
-    };
+    let table = get_toml_table(&args, &toml_data);
 
     let input = input_file::InputData::read(table);
 
@@ -66,3 +55,17 @@ fn main() {
     println!("Successfully ran migrations")
 }
 
+
+fn get_toml_table<'a>(args: &'a Args, toml_data: &'a Value) -> &'a Value{
+    if !args.toml_table.is_empty() {
+        let table = toml_data.get(&args.toml_table);
+        if table.is_none() {
+            eprintln!("Unable to find toml table: \"{}\"", &args.toml_table);
+            std::process::abort()
+        }
+        
+        table.unwrap()
+    } else {
+        &toml_data
+    }
+}
