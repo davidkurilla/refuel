@@ -4,6 +4,7 @@ use toml::Value;
 use clap::{Parser, ValueHint};
 
 mod input_file;
+mod tests;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -19,6 +20,7 @@ fn main() {
     let args = Args::parse();
 
     let toml_file = &args.toml_file;
+    let table_name = &args.toml_table;
     let toml_contents = match std::fs::read_to_string(toml_file) {
         Ok(contents) => contents,
         Err(e) => {
@@ -34,7 +36,7 @@ fn main() {
         }
     };
 
-    let table = get_toml_table(&args, &toml_data);
+    let table = get_toml_table(&table_name, &toml_data);
 
     let input = input_file::InputData::read(table);
 
@@ -56,11 +58,11 @@ fn main() {
 }
 
 
-fn get_toml_table<'a>(args: &'a Args, toml_data: &'a Value) -> &'a Value{
-    if !args.toml_table.is_empty() {
-        let table = toml_data.get(&args.toml_table);
+pub fn get_toml_table<'a>(table_name: &'a str, toml_data: &'a Value) -> &'a Value{
+    if !table_name.is_empty() {
+        let table = toml_data.get(&table_name);
         if table.is_none() {
-            eprintln!("Unable to find toml table: \"{}\"", &args.toml_table);
+            eprintln!("Unable to find toml table: \"{}\"", &table_name);
             std::process::abort()
         }
         
