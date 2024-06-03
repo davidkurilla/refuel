@@ -14,7 +14,7 @@ fn postgres_migrations_test() {
     let pq_port = test_toml_data.get("port").unwrap().as_integer().unwrap() as u16;
 
     let postgres_container = GenericImage::new("postgres", "latest")
-        //.with_exposed_port(pq_port)
+        .with_exposed_port(pq_port)
         .with_env_var("POSTGRES_USER", pq_user)
         .with_env_var("POSTGRES_PASSWORD", pq_pass)
         .with_env_var("POSTGRES_DB", pq_dbname)
