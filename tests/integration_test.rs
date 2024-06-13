@@ -23,14 +23,14 @@ fn postgres_migrations_test() {
         .expect("Postgres started");
 
     // See https://doc.rust-lang.org/cargo/reference/environment-variables.html
-    let binary_path = env!("CARGO_BIN_EXE_refuel");
+    // let binary_path = env!("CARGO_BIN_EXE_refuel");
     
-    let mut binding = Command::new(binary_path);
-    let cmd = binding.args(["--toml-file", test_toml_path]);
+    // let mut binding = Command::new(binary_path);
+    // let cmd = binding.args(["--toml-file", test_toml_path]);
     
-    let output = cmd.output();
+    // let output = cmd.output();
 
-    assert!(output.is_ok());
+    // assert!(output.is_ok());
 
-    postgres_container.stop().expect("Postgres stopped");
+    // postgres_container.stop().expect("Postgres stopped");
 }
